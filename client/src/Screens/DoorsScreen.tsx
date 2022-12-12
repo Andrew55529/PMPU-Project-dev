@@ -1,10 +1,12 @@
 import React, {FC, useEffect} from "react";
-import {PageLogo, PageTitle} from "../components/styles";
+import {Line, PageLogo, PageTitle} from "../components/styles";
 import EmptyContainer from "../components/Containers/EmptyContainer";
 import {useTypedSelector} from "../hooks/useTypedSelector";
 import {useAction} from "../hooks/useAction";
 import MainContainer from "../components/Containers/MainContainer";
 import RegularText from "../components/Text/RegularRext";
+import RegularButton from "../components/Buttons/RegularButton";
+import DoorsService from "../services/DoorsService";
 
 
 const DoorsScreen: FC = () => {
@@ -30,7 +32,11 @@ const DoorsScreen: FC = () => {
                     doors.map(door => {
                         console.log(door);
                         return (
-                            <RegularText>{door.name}{door.local_door_id}</RegularText>
+                            <>
+                                <RegularButton key={door.local_door_id} onPress={() => {DoorsService.openDoor(door.local_door_id);}}><RegularText >{door.name}</RegularText ></RegularButton>
+                                <Line key={"l"+door.local_door_id}  />
+                            </>
+                            // <RegularText>{door.name}{door.local_door_id}</RegularText>
                         );
                     })
 

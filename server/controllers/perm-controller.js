@@ -24,6 +24,16 @@ class PermController {
         }
     }
 
+    async openDoors(req, res, next) {
+        try {
+            // Check session
+          console.log(req.params);
+            return res.json("123");
+        } catch (e) {
+            next(e)
+        }
+    }
+
 
 }
 

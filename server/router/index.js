@@ -23,6 +23,8 @@ router.get('/refresh',ipuaMiddleware,addAccessTokenMiddleware ,userController.re
 router.get('/users',addAccessTokenMiddleware, authMiffleware, userController.getUsers);
 
 router.get('/perm/doors',addAccessTokenMiddleware , addAccessTokenDataMiddleware,permController.getDoors);
+router.post('/perm/door/:localDoorId',addAccessTokenMiddleware , addAccessTokenDataMiddleware,permController.openDoors);
+
 
 module.exports = router
 
