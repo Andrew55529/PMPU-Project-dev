@@ -2,6 +2,7 @@ const permService = require('../service/perm-service');
 const UserService = require('../service/user-service');
 const {validationResult} = require('express-validator');
 const ApiError = require('../exceptions/api-error');
+const {json} = require("express");
 
 
 class PermController {
@@ -12,11 +13,11 @@ class PermController {
             if (test === false) {
                 throw ApiError.UnauthotizedError('DEBUG 21');
             }
+            console.log("|||",req.accessTokenData['userId']);
+            const userData =await permService.getDoors(req.accessTokenData['userId']);
 
-            const userData =await permService.getDoors(147);
-
-
-            return res.json(userData);
+            console.log("userData",userData['rows']);
+            return res.json(userData['rows']);
 
         } catch (e) {
             next(e)

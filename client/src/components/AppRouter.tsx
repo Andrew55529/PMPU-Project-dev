@@ -1,9 +1,10 @@
 import React from 'react';
 import {Routes,Route,Navigate} from 'react-router-dom';
-import Empty from "../Screens/Empty";
+import DoorsScreen from "../Screens/DoorsScreen";
 import NavbarScreen from "../Screens/NavbarScreen";
 import LoginForm from "../Screens/LoginForm";
 import {useTypedSelector} from "../hooks/useTypedSelector";
+import Empty2 from "../Screens/Empty2";
 
 const AppRouter = () => {
     const {isAuth, isLoading} = useTypedSelector(state => state.auth);
@@ -15,7 +16,7 @@ const AppRouter = () => {
                 <React.Fragment>
                     <NavbarScreen />
                     <Routes>
-                        <Route path="/doors" element={<Empty/>}/>
+                        <Route path="/doors" element={<DoorsScreen/>}/>
                         <Route path="*" element={<Navigate to="doors" />} />
                     </Routes>
                 </React.Fragment>
@@ -25,7 +26,7 @@ const AppRouter = () => {
                     <Route path="*" element={<Navigate to="login" />} />
                 </Routes>
             :
-            <Empty />
+            <Empty2 />
     );
 };
 

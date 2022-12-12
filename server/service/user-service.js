@@ -25,14 +25,11 @@ class UserService {
         //await mailService.sendActivationMail(email,`${process.env.API_URL}/api/activate/${activationLink}`);
         //const userDto = new UserDto(user);
 
-        // const tokens = tokenService.generateToken({test: 123});
-        // await tokenService.saveToken(user1['insertId'], tokens.refreshToken, ip, useragent);
-        // return { ...tokens, user: "123" }
 
 
         const newRefreshToken = tokenService.generateRefreshToken();
         const sessionId = await tokenService.saveToken(user1['insertId'], newRefreshToken,ip,useragent);
-        const newAccessToken = tokenService.generateAccessToken({test: 123,sessionId},newRefreshToken);
+        const newAccessToken = tokenService.generateAccessToken({userId: user1['insertId'],sessionId},newRefreshToken);
 
         return { accessToken: newAccessToken,refreshToken: newRefreshToken, user: user1['insertId'] } //Пересмотреть отдачу
 
@@ -65,7 +62,7 @@ class UserService {
         //Генерация пары токенов и сохранение в БД
         const newRefreshToken = tokenService.generateRefreshToken();
         const sessionId = await tokenService.saveToken(rows[0].user_id, newRefreshToken,ip,useragent);
-        const newAccessToken = tokenService.generateAccessToken({test: 123,sessionId},newRefreshToken);
+        const newAccessToken = tokenService.generateAccessToken({userId: rows[0].user_id,sessionId},newRefreshToken);
 
         return { accessToken: newAccessToken,refreshToken: newRefreshToken, user: rows[0].user_id } //Пересмотреть отдачу
     }
@@ -106,7 +103,7 @@ class UserService {
         //Генерация новой пары токенов и сохранение в БД
         const newRefreshToken = tokenService.generateRefreshToken();
         await tokenService.updateToken(tokenFromDb[0]['auth_id'], newRefreshToken,ip );
-        const newAccessToken = tokenService.generateAccessToken({test: 123,sessionId: tokenFromDb[0]['auth_id']},newRefreshToken);
+        const newAccessToken = tokenService.generateAccessToken({userId: tokenFromDb[0]['user_id'], sessionId: tokenFromDb[0]['auth_id']},newRefreshToken);
 
         return { accessToken: newAccessToken,refreshToken: newRefreshToken, user: "123" }                           //Пересмотреть отдачу
 

@@ -80,7 +80,7 @@ class TokenService {
     }
 
     async findToken(refreshToken) {
-        const rows1 = await pool.query('SELECT auth_id,useragent FROM auth WHERE refresh_token = ? LIMIT 1', [refreshToken]);
+        const rows1 = await pool.query('SELECT auth_id,useragent,user_id FROM auth WHERE refresh_token = ? LIMIT 1', [refreshToken]);
         return rows1;
     }
 
