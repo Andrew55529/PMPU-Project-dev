@@ -1,0 +1,22 @@
+import React, {useState} from "react";
+
+interface PersonProps1 {
+    icon?: any;
+    children?: React.ReactNode;
+}
+
+function NavItem(props: PersonProps1) {
+    const [open, setOpen] = useState(false);
+
+
+    return (
+        <li className="nav-item">
+            <a href="#" className="icon-button" onClick={() => setOpen(!open)}>
+                {props.icon}
+            </a>
+            {open && props.children}
+        </li>
+    );
+}
+
+export default NavItem;
