@@ -2,7 +2,7 @@ const permService = require('../service/perm-service');
 const UserService = require('../service/user-service');
 const {validationResult} = require('express-validator');
 const ApiError = require('../exceptions/api-error');
-const {json} = require("express");
+const pool = require("../service/db-service");
 
 
 class PermController {
@@ -27,7 +27,9 @@ class PermController {
     async openDoors(req, res, next) {
         try {
             // Check session
-          console.log(req.params);
+            //Перенести отсюда
+            const rows2 = await pool.query('INSERT INTO logs (user_id,action,object) VALUES(?,1,?)', [req['accessTokenData']['userId'],req.params['localDoorId']]);
+            console.log(rows2);
             return res.json("123");
         } catch (e) {
             next(e)
