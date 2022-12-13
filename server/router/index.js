@@ -20,6 +20,8 @@ router.post('/login', ipuaMiddleware,
 router.post('/logout', userController.logout);
 router.get('/activate/:link', userController.activate);
 router.get('/refresh',ipuaMiddleware,addAccessTokenMiddleware ,userController.refresh);
+
+
 router.get('/users',addAccessTokenMiddleware, authMiffleware, userController.getUsers);
 
 router.get('/perm/doors',addAccessTokenMiddleware , addAccessTokenDataMiddleware,permController.getDoors);

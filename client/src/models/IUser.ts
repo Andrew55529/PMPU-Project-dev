@@ -1,5 +1,5 @@
 export interface IUser {
-    email: string;
-    isActivated: boolean;
-    id: string;
+    userId?: number;
+    permission?: number[];
+    sessionId?: number;
 }

@@ -74,6 +74,7 @@ class UserController {
 
     async getUsers(req, res, next) {
         try {
+            //Куча проверок или middleware доделать
             const users = await userService.getAlUsers();
             return res.json(users);
             res.json(['123','456']);

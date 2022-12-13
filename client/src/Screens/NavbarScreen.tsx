@@ -6,12 +6,13 @@ import {ReactComponent as BellIcon} from "../icons/bell.svg";
 import {ReactComponent as CarrotIcon} from "../icons/carrot.svg";
 import DropdownMenu from "../components/DropdownMenu";
 import "./NavScreen.css";
+import {Link} from "react-router-dom";
 const NavbarScreen = () => {
     return (
         <div>
             <Navbar>
                 <NavItem icon={<PlusIcon />} />
-                <NavItem icon={<BellIcon />} />
+                <Link to="/doors"><NavItem icon={<BellIcon />} /></Link>
                 <NavItem icon={<CarrotIcon />}>
                     <DropdownMenu />
                 </NavItem>

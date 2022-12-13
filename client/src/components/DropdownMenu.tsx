@@ -7,7 +7,8 @@ import {ReactComponent as ThemeLightDark} from "../icons/ThemeLightDark.svg";
 import {ReactComponent as SettingsIcon} from "../icons/settings.svg";
 import {ReactComponent as LogoutIcon} from "../icons/logout.svg";
 import {useAction} from "../hooks/useAction";
-
+import {useTypedSelector} from "../hooks/useTypedSelector";
+import {  Link } from "react-router-dom"
 
 interface PersonProps1 {
     icon?: any;
@@ -51,6 +52,8 @@ function DropdownMenu(props: PersonProps1) {
     }
     const {logout} = useAction();
 
+    const {user} = useTypedSelector(state => state.auth);
+
     return (
         <div className="dropdown" style={{ height: menuHeight}} ref={dropdownRef}>
 
@@ -62,7 +65,6 @@ function DropdownMenu(props: PersonProps1) {
                 onEnter={calcHeight}>
                 <div className="menu">
                     <DropdownItem>My Profile</DropdownItem>
-                    <DropdownItem>Logs</DropdownItem>
                     <DropdownItem
                         leftIcon={<SettingsIcon />}
                         rightIcon={<ChevronIcon />}
@@ -89,7 +91,12 @@ function DropdownMenu(props: PersonProps1) {
                     <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
                         <h2>Back</h2>
                     </DropdownItem>
-                    <DropdownItem leftIcon={<ThemeLightDark />}>Users</DropdownItem>
+                    {
+                        // @ts-ignore
+                        user["permission"].includes(2) &&
+                        <Link to="/users"><DropdownItem leftIcon={<ThemeLightDark />}>Users</DropdownItem></Link>
+                    }
+
                     <DropdownItem leftIcon={<BoltIcon />}>Add user</DropdownItem>
                     <DropdownItem leftIcon={<BoltIcon />}>Logs</DropdownItem>
 
@@ -106,7 +113,6 @@ function DropdownMenu(props: PersonProps1) {
                         <h2>Back</h2>
                     </DropdownItem>
                     <DropdownItem leftIcon={<ThemeLightDark />}>Theme</DropdownItem>
-                    <DropdownItem leftIcon={<BoltIcon />}>CSS</DropdownItem>
 
                 </div>
             </CSSTransition>

@@ -17,8 +17,9 @@ export const AuthActionCreator = {
             const response = await AuthService.login(username,password);
             console.log(response)
             localStorage.setItem('token', response.data.accessToken);
+            const datafromtoken=JSON.parse(atob(response.data.accessToken.split('.')[1]));
             dispatch(AuthActionCreator.setIsAuth(true));
-            dispatch(AuthActionCreator.setUser(response.data.user));
+            dispatch(AuthActionCreator.setUser({userId: datafromtoken["userId"], permission: datafromtoken["permission"],sessionId:datafromtoken["sessionId"]  }));
 
         }catch (e:any) {
 
@@ -33,8 +34,9 @@ export const AuthActionCreator = {
             const response = await AuthService.registration(username,password);
             console.log(response)
             localStorage.setItem('token', response.data.accessToken);
+            const datafromtoken=JSON.parse(atob(response.data.accessToken.split('.')[1]));
             dispatch(AuthActionCreator.setIsAuth(true));
-            dispatch(AuthActionCreator.setUser(response.data.user));
+            dispatch(AuthActionCreator.setUser({userId: datafromtoken["userId"], permission: datafromtoken["permission"],sessionId:datafromtoken["sessionId"]  }));
 
         }catch (e:any) {
 
@@ -49,8 +51,9 @@ export const AuthActionCreator = {
             const response = await $api.get<AuthResponse>(`/refresh`);
             console.log(response)
             localStorage.setItem('token', response.data.accessToken);
+            const datafromtoken=JSON.parse(atob(response.data.accessToken.split('.')[1]));
             dispatch(AuthActionCreator.setIsAuth(true));
-            dispatch(AuthActionCreator.setUser(response.data.user));
+            dispatch(AuthActionCreator.setUser({userId: datafromtoken["userId"], permission: datafromtoken["permission"],sessionId:datafromtoken["sessionId"]  }));
         }catch (e:any) {
             console.log("[AUTH] error");
             dispatch(AuthActionCreator.setError(e.response?.data?.message))

@@ -5,9 +5,10 @@ import NavbarScreen from "../Screens/NavbarScreen";
 import LoginForm from "../Screens/LoginForm";
 import {useTypedSelector} from "../hooks/useTypedSelector";
 import Empty2 from "../Screens/Empty2";
+import UsersScreen from "../Screens/UsersScreen";
 
 const AppRouter = () => {
-    const {isAuth, isLoading} = useTypedSelector(state => state.auth);
+    const {isAuth, isLoading,user} = useTypedSelector(state => state.auth);
     return (
         !isLoading
             ?
@@ -17,6 +18,7 @@ const AppRouter = () => {
                     <NavbarScreen />
                     <Routes>
                         <Route path="/doors" element={<DoorsScreen/>}/>
+                        <Route path="/users" element={<UsersScreen/>}/>
                         <Route path="*" element={<Navigate to="doors" />} />
                     </Routes>
                 </React.Fragment>

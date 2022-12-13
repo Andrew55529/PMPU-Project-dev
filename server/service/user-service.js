@@ -25,13 +25,14 @@ class UserService {
         //await mailService.sendActivationMail(email,`${process.env.API_URL}/api/activate/${activationLink}`);
         //const userDto = new UserDto(user);
 
+        const permission= [];
 
 
         const newRefreshToken = tokenService.generateRefreshToken();
         const sessionId = await tokenService.saveToken(user1['insertId'], newRefreshToken,ip,useragent);
-        const newAccessToken = tokenService.generateAccessToken({userId: user1['insertId'],sessionId},newRefreshToken);
+        const newAccessToken = tokenService.generateAccessToken({userId: user1['insertId'],permission,sessionId},newRefreshToken);
 
-        return { accessToken: newAccessToken,refreshToken: newRefreshToken, user: user1['insertId'] } //Пересмотреть отдачу
+        return { accessToken: newAccessToken,refreshToken: newRefreshToken} //Пересмотреть отдачу
 
     }
 
@@ -47,24 +48,42 @@ class UserService {
 
     async login(email, password, ip, useragent) {
         //Проверка существования пользователя
+        // console.time("1");
         const rows = await pool.query('SELECT user_id, password FROM users WHERE name = ? LIMIT 1', [email]);
+        // console.timeEnd("1");
+        // console.time("2");
         if (rows.length==0) {
             throw ApiError.BadRequest(`Пользователь с таким адресом ${email} не существует`)
         }
+        // console.timeEnd("2");
+        // console.time("3");
         //Проверка паролья
         const isPassEquals = await bcrypt.compare(password,rows[0].password);
         if (!isPassEquals) {
             throw ApiError.BadRequest(`Неверный пароль`)
+        }
+        // console.timeEnd("3");
+        // console.time("4");
+
+        // Получение прав пользователя
+        const permission= []
+        const perm = await pool.query('SELECT perm_name_id FROM permissions WHERE user_id = ?', [rows[0].user_id]);
+        if (perm.length!=0){
+            perm.forEach(element => { permission.push(element['perm_name_id']); });
         }
 
 
         //const userDto = new UserDto(user);
         //Генерация пары токенов и сохранение в БД
         const newRefreshToken = tokenService.generateRefreshToken();
+        // console.timeEnd("4");
+        // console.time("5");
         const sessionId = await tokenService.saveToken(rows[0].user_id, newRefreshToken,ip,useragent);
-        const newAccessToken = tokenService.generateAccessToken({userId: rows[0].user_id,sessionId},newRefreshToken);
-
-        return { accessToken: newAccessToken,refreshToken: newRefreshToken, user: rows[0].user_id } //Пересмотреть отдачу
+        // console.timeEnd("5");
+        // console.time("6");
+        const newAccessToken = tokenService.generateAccessToken({userId: rows[0].user_id,permission,sessionId},newRefreshToken);
+        // console.timeEnd("6");
+        return { accessToken: newAccessToken,refreshToken: newRefreshToken } //Пересмотреть отдачу
     }
 
     async logout(refreshToken) {
@@ -97,20 +116,24 @@ class UserService {
         //     throw ApiError.UnauthotizedError('Wrong UA');
         // }
 
-      //  const user = await UserModel.findById(userData.id);
-      //  const userDto = new UserDto(user);
+
+        const permission= []
+        const perm = await pool.query('SELECT perm_name_id FROM permissions WHERE user_id = ?', [tokenFromDb[0]['user_id']]);
+        if (perm.length!=0){
+            perm.forEach(element => { permission.push(element['perm_name_id']); });
+        }
 
         //Генерация новой пары токенов и сохранение в БД
         const newRefreshToken = tokenService.generateRefreshToken();
         await tokenService.updateToken(tokenFromDb[0]['auth_id'], newRefreshToken,ip );
-        const newAccessToken = tokenService.generateAccessToken({userId: tokenFromDb[0]['user_id'], sessionId: tokenFromDb[0]['auth_id']},newRefreshToken);
+        const newAccessToken = tokenService.generateAccessToken({userId: tokenFromDb[0]['user_id'],permission ,sessionId: tokenFromDb[0]['auth_id']},newRefreshToken);
 
-        return { accessToken: newAccessToken,refreshToken: newRefreshToken, user: "123" }                           //Пересмотреть отдачу
+        return { accessToken: newAccessToken,refreshToken: newRefreshToken }                           //Пересмотреть отдачу
 
     }
 
     async checkSession(auth_id) {
-        const rows = await pool.query('SELECT useragent FROM auth WHERE auth_id = ? LIMIT 1', [auth_id]);
+        const rows = await pool.query('SELECT useragent FROM sessions WHERE auth_id = ? LIMIT 1', [auth_id]);
         if (rows.length==0) {
             return false;
         }
@@ -118,8 +141,9 @@ class UserService {
     }
 
     async getAlUsers() {
-        const users = await UserModel.find();
-        return users;
+        const rows = await pool.query('SELECT user_id, name FROM users');
+        delete rows.meta;
+        return rows;
     }
 
 }

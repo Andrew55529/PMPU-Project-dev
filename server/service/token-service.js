@@ -46,18 +46,18 @@ class TokenService {
     }
 
     async saveToken(userId, refreshToken, ip, userAgent) {  // Дописать проверку раз в время удаление старых сессий
-        const rows1 = await pool.query('SELECT auth_id FROM auth WHERE user_id = ? ORDER BY expired_in ASC LIMIT 6', [userId]);
+        const rows1 = await pool.query('SELECT auth_id FROM sessions WHERE user_id = ? ORDER BY expired_in ASC LIMIT 6', [userId]);
         if (rows1.length>=5) {
             console.log("Много авторизаций, удаляем самую старую");
-            const rows2 = await pool.query('DELETE FROM auth WHERE auth_id = ?', [rows1[0]['auth_id']]);
+            const rows2 = await pool.query('DELETE FROM sessions WHERE auth_id = ?', [rows1[0]['auth_id']]);
         }
-        const rows2 = await pool.query('INSERT INTO auth (user_id,ip,useragent,refresh_token,expired_in) VALUES(?,?,?,?,CURRENT_TIMESTAMP(0) + interval \'7\' day)', [userId,ip,userAgent,refreshToken]);
+        const rows2 = await pool.query('INSERT INTO sessions (user_id,ip,useragent,refresh_token,expired_in) VALUES(?,?,?,?,CURRENT_TIMESTAMP(0) + interval \'7\' day)', [userId,ip,userAgent,refreshToken]);
 
         return Number(rows2['insertId']);
     }
 
     async updateToken(authId, refreshToken, ip) {
-        const rows2 = await pool.query('UPDATE auth SET refresh_token= ?, ip = ?, last_action = CURRENT_TIMESTAMP(0), expired_in = CURRENT_TIMESTAMP(0) + interval \'7\' day WHERE auth_id = ?', [refreshToken,ip,authId]);
+        const rows2 = await pool.query('UPDATE sessions SET refresh_token= ?, ip = ?, last_action = CURRENT_TIMESTAMP(0), expired_in = CURRENT_TIMESTAMP(0) + interval \'7\' day WHERE auth_id = ?', [refreshToken,ip,authId]);
         if (rows2['affectedRows']==1) {
             return true;
         }
@@ -65,14 +65,14 @@ class TokenService {
     }
 
     async removeToken(refreshToken) {  //Удаление
-        const rows2 = await pool.query('DELETE FROM auth WHERE refresh_token = ?', [refreshToken]);
+        const rows2 = await pool.query('DELETE FROM sessions WHERE refresh_token = ?', [refreshToken]);
         if (rows2['affectedRows']==1) {
             return true;
         }
         return false;
     }
     async removeTokenByID (auth_id) {  //Удаление
-        const rows2 = await pool.query('DELETE FROM auth WHERE auth_id = ?', [auth_id]);
+        const rows2 = await pool.query('DELETE FROM sessions WHERE auth_id = ?', [auth_id]);
         if (rows2['affectedRows']==1) {
             return true;
         }
@@ -80,7 +80,7 @@ class TokenService {
     }
 
     async findToken(refreshToken) {
-        const rows1 = await pool.query('SELECT auth_id,useragent,user_id FROM auth WHERE refresh_token = ? LIMIT 1', [refreshToken]);
+        const rows1 = await pool.query('SELECT auth_id,useragent,user_id FROM sessions WHERE refresh_token = ? LIMIT 1', [refreshToken]);
         return rows1;
     }
 
