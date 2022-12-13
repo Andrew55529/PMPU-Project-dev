@@ -34,7 +34,7 @@ class TokenService {
 
     validateRefreshToken(accessToken, refreshToken) {
         //Проверяем верный ли у нас access токен
-        const validTest = this.validateAccessToken(accessToken,true)
+        const validTest = this.validateAccessToken(accessToken,true)  //Переделать
         if (validTest == null) {
           return false;
         }

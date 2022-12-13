@@ -1,6 +1,7 @@
 const userService = require('../service/user-service');
 const {validationResult} = require('express-validator');
 const ApiError = require('../exceptions/api-error');
+const {application} = require("express");
 
 //const geoip = require('geoip-lite');
 
@@ -64,7 +65,7 @@ class UserController {
 
         try {
             const {refreshToken} = req.cookies;
-            const userData = await userService.refresh(refreshToken,req.accessToken,req.ip2,req.ua);
+            const userData = await userService.refresh(refreshToken,req.AT,req.ip2,req.ua);
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
             return res.json(userData);
         } catch (e) {
@@ -74,13 +75,25 @@ class UserController {
 
     async getUsers(req, res, next) {
         try {
-            //Куча проверок или middleware доделать
             const users = await userService.getAlUsers();
             return res.json(users);
             res.json(['123','456']);
         } catch (e) {
             next(e)
         }
+    }
+    
+    async getSession(req,res,next) {
+        try {
+            console.log(req.ATD["userId"]);
+            const users = await userService.getSessions(req.ATD["userId"]);
+            return res.json(users);
+        } catch (e) {
+            console.log(e);
+            next(e);
+        }
+        
+        
     }
 }
 

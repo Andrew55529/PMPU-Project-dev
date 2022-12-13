@@ -1,6 +1,6 @@
-const ApiErrpr = require('../exceptions/api-error');
-
-module.exports = function (req, res, next) {
+const ApiErrpr = require('../../exceptions/api-error');
+// Add access token to request
+module.exports = function (req, res, next) { // Test
     try {
         const authorizationHeader = req.headers.authorization;
         if (!authorizationHeader) {
@@ -12,7 +12,7 @@ module.exports = function (req, res, next) {
             return next(ApiErrpr.UnauthotizedError('DEBUG 11'));
         }
 
-        req.accessToken=accessToken;
+        req.AT=accessToken;
         next();
     } catch (e) {
         return next(ApiErrpr.UnauthotizedError('DEBUG 12'));

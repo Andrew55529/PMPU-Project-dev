@@ -9,6 +9,13 @@ class PermService {
 
         return { rows }
     }
+    async getLogs() {
+        const rows = await pool.query('SELECT * FROM logs ', []);
+        console.log(rows)
+        delete rows.meta;
+
+        return { rows }
+    }
 W
 }
 

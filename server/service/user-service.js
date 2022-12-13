@@ -135,15 +135,38 @@ class UserService {
     async checkSession(auth_id) {
         const rows = await pool.query('SELECT useragent FROM sessions WHERE auth_id = ? LIMIT 1', [auth_id]);
         if (rows.length==0) {
-            return false;
+            return null;
         }
-        return true;
+        return rows[0]['useragent'];
     }
 
     async getAlUsers() {
         const rows = await pool.query('SELECT user_id, name FROM users');
         delete rows.meta;
         return rows;
+    }
+
+    async getSessions(userId) {
+        const rows = await pool.query('SELECT ip,useragent,last_action,first_enter FROM sessions');
+        delete rows.meta;
+        return rows;
+    }
+
+    async getPermissionDB(user_id) {
+        const rows = await pool.query('SELECT perm_name_id FROM permissions WHERE user_id = ?',[user_id]);
+        const permission=[]
+        if (rows.length!=0){
+            rows.forEach(element => { permission.push(element['perm_name_id']); });
+        }
+        console.log(permission);
+        return permission
+    }
+
+    async checkPermissionDB(user_id, permission) {
+        const rows = await pool.query('SELECT perm_name_id FROM permissions WHERE user_id = ? AND perm_name_id = ?',[user_id,permission]);
+        if (rows.length!=0)
+            return true;
+        return false
     }
 
 }

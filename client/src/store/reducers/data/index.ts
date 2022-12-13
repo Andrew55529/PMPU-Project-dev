@@ -3,6 +3,7 @@ import {DataState, DataAction,DataActionEnum} from "./types";
 const initialState: DataState = {
     doors: [],
     users: [],
+    logs: [],
 }
 export default function authReducer(state=initialState, action: DataAction):DataState {
     switch (action.type){
@@ -10,6 +11,8 @@ export default function authReducer(state=initialState, action: DataAction):Data
             return {...state,doors: action.payload}
         case DataActionEnum.SET_USERS:
             return {...state,users: action.payload}
+        case DataActionEnum.SET_LOGS:
+            return {...state,logs: action.payload}
         default:
             return state;
     }

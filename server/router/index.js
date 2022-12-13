@@ -2,10 +2,13 @@ const Router = require('express').Router;
 const userController = require('../controllers/user-controller');
 const permController = require('../controllers/perm-controller');
 const {body} = require('express-validator');
-const authMiffleware = require('../middlewares/auth-middleware')
+
 const ipuaMiddleware = require('../middlewares/ip-ua-middleware');
-const addAccessTokenMiddleware = require('../middlewares/addAccessToken-middleware');
-const addAccessTokenDataMiddleware = require('../middlewares/addAccessTokenData-middleware');
+
+const AATM = require('../middlewares/accessToken/addAccessToken-middleware'); // Добавляет токен к запросу, проверяя его существования
+const CATM = require('../middlewares/accessToken/checkAccessToken-middleware');
+const DBATM = require('../middlewares/accessToken/checkDBAccessToken-middleware')
+const PM = require('../middlewares/permission-middleware');
 
 const router = new Router();
 
@@ -19,13 +22,14 @@ router.post('/login', ipuaMiddleware,
     userController.login);
 router.post('/logout', userController.logout);
 router.get('/activate/:link', userController.activate);
-router.get('/refresh',ipuaMiddleware,addAccessTokenMiddleware ,userController.refresh);
+router.get('/refresh',ipuaMiddleware,AATM ,userController.refresh); //Проверить надо ли еще
 
+router.get('/users',AATM,CATM,DBATM,PM(2), permController.getLogs);
+router.get('/users',AATM,CATM,DBATM,PM(1), userController.getUsers);
+router.get('/sessions',AATM, CATM,DBATM, userController.getSession);
 
-router.get('/users',addAccessTokenMiddleware, authMiffleware, userController.getUsers);
-
-router.get('/perm/doors',addAccessTokenMiddleware , addAccessTokenDataMiddleware,permController.getDoors);
-router.post('/perm/door/:localDoorId',addAccessTokenMiddleware , addAccessTokenDataMiddleware,permController.openDoors);
+router.get('/perm/doors',AATM, CATM,DBATM,permController.getDoors);
+router.post('/perm/door/:localDoorId',AATM, CATM,DBATM,permController.openDoors);
 
 
 module.exports = router
