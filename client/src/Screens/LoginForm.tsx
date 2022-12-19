@@ -46,6 +46,7 @@ const LoginScreen: FC = () => {
                 <RegularButton onPress={() => {login(email,password);}}><RegularText >Press m1e</RegularText ></RegularButton>
                 <Line />
                 <a href={githubUrl}><RegularButton  textStyle={{backgroundColor: green }}  ><GoogleIcon/><RegularText >Press m2e</RegularText></RegularButton></a>
+
             </EmptyContainer>
         </MainContainer>
     );

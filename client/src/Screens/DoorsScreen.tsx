@@ -28,14 +28,15 @@ const DoorsScreen: FC = () => {
             <EmptyContainer>
                 <PageLogo resizeMode="cover" source={require('../assets/logo.png')}/>
                 <PageTitle> 123123</PageTitle>
+
                 {
                     doors.map(door => {
                         console.log(door);
                         return (
-                            <>
+                            <React.Fragment key={door.local_door_id}>
                                 <RegularButton key={door.local_door_id} onPress={() => {DoorsService.openDoor(door.local_door_id);}}><RegularText >{door.name}</RegularText ></RegularButton>
                                 <Line key={"l"+door.local_door_id}  />
-                            </>
+                            </React.Fragment>
                             // <RegularText>{door.name}{door.local_door_id}</RegularText>
                         );
                     })

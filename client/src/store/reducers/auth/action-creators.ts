@@ -39,6 +39,20 @@ export const AuthActionCreator = {
             dispatch(AuthActionCreator.setUser({userId: datafromtoken["userId"], permission: datafromtoken["permission"],sessionId:datafromtoken["sessionId"]  }));
 
         }catch (e:any) {
+            console.log("123");
+            dispatch(AuthActionCreator.setError(e.response?.data?.message));
+             throw e;
+        }
+
+    },
+    connectGithub: (code:string) => async (dispatch: AppDsipatch) => {
+        try {
+            console.log(code)
+            dispatch(AuthActionCreator.setIsLoading(true));
+            const response = await AuthService.connectGithub(code);
+            console.log(response)
+
+        }catch (e:any) {
 
             dispatch(AuthActionCreator.setError(e.response?.data?.message))
         }

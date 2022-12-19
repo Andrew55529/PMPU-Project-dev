@@ -25,7 +25,7 @@ class PermController {
         try {
             // Check session
             //Перенести отсюда
-            const rows2 = await pool.query('INSERT INTO logs (user_id,action,object) VALUES(?,1,?)', [req['accessTokenData']['userId'],req.params['localDoorId']]);
+            const rows2 = await pool.query('INSERT INTO logs (user_id,action,object) VALUES(?,1,?)', [req.ATD['userId'],req.params['localDoorId']]);
             console.log(rows2);
             return res.json("123");
         } catch (e) {

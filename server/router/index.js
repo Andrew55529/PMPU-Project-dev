@@ -33,6 +33,7 @@ router.get('/perm/doors',AATM, CATM,DBATM,permController.getDoors);
 router.post('/perm/door/:localDoorId',AATM, CATM,DBATM,permController.openDoors);
 
 router.post('/login/github',body('code').isLength({min:15, max:25}),ipuaMiddleware,userController.loginGithub);
+router.post('/connect/github',body('code').isLength({min:15, max:25}),ipuaMiddleware,AATM, CATM,DBATM,userController.connectGithub);
 
 
 module.exports = router

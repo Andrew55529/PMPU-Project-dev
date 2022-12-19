@@ -117,6 +117,22 @@ class UserService {
         // console.timeEnd("6");
         return { accessToken: newAccessToken,refreshToken: newRefreshToken } //Пересмотреть отдачу
     }
+    async connectGithub(github_id,user_id, ip, useragent) {
+        //Проверка существования пользователя
+        const rows = await pool.query('SELECT user_id FROM users WHERE github_id = ? LIMIT 1', [github_id]);
+
+        if (rows.length==1) {
+            const rows2 = await pool.query('UPDATE users SET github_id = NULL WHERE user_id = ?', [rows[0]["user_id"]]);
+        }
+
+        // Получение прав пользователя
+        const rows2 = await pool.query('UPDATE users SET github_id = ? WHERE user_id = ?', [github_id,user_id]);
+
+
+        //const userDto = new UserDto(user);
+        //Генерация пары токенов и сохранение в БД
+       return true;
+    }
 
 
     async logout(refreshToken) {
@@ -170,6 +186,7 @@ class UserService {
         if (rows.length==0) {
             return null;
         }
+        console.log(rows);
         return rows[0]['useragent'];
     }
 

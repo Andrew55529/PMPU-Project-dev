@@ -24,6 +24,7 @@ interface Test3 {
     goToMenu?: string;
     children?: React.ReactNode;
     onClick?: () => void;
+    link?: string;
 }
 
 
@@ -41,9 +42,13 @@ function DropdownMenu(props: PersonProps1) {
         setMenuHeight(height);
     }
 
+    const clientId = "d63b9e565cbef096b283";
+    const githubUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
+
+
     function DropdownItem(props: Test3) {
         return (
-            <a href="#" className="menu-item" onClick={() => {props.goToMenu && setActiveMenu(props.goToMenu); props.onClick?.()}}>
+            <a href={props.link || "#"} className="menu-item" onClick={() => {props.goToMenu && setActiveMenu(props.goToMenu); props.onClick?.()}}>
                 <span className="icon-button">{props.leftIcon}</span>
                 {props.children}
                 <span className="icon-right">{props.rightIcon}</span>
@@ -117,7 +122,7 @@ function DropdownMenu(props: PersonProps1) {
                     <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
                         <h2>Back</h2>
                     </DropdownItem>
-                    <DropdownItem leftIcon={<ThemeLightDark />}>Theme</DropdownItem>
+                    <DropdownItem link={githubUrl} leftIcon={<ThemeLightDark />}>Connect Github</DropdownItem>
 
                 </div>
             </CSSTransition>
