@@ -1,16 +1,15 @@
 const jwt = require('jsonwebtoken');
-const tokenModel= require('../models/token-model');
 const pool = require('./db-service');
 const randomstring = require("randomstring");
 
 class TokenService {
-    generateToken(payload) {
-        const refreshToken = this.generateRefreshToken();
-        const accessToken = this.generateAccessToken(payload,refreshToken);
-        // const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {expiresIn: '1h'})
-        // const refreshToken =accessToken.split('.')[2].slice(-16)+"."+randomstring.generate(48);  // Создаем refresh токен на основе access токене и вновь сгенерированной строки
-        return { accessToken, refreshToken }
-    }
+    // generateToken(payload) {
+    //     const refreshToken = this.generateRefreshToken();
+    //     const accessToken = this.generateAccessToken(payload,refreshToken);
+    //     // const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {expiresIn: '1h'})
+    //     // const refreshToken =accessToken.split('.')[2].slice(-16)+"."+randomstring.generate(48);  // Создаем refresh токен на основе access токене и вновь сгенерированной строки
+    //     return { accessToken, refreshToken }
+    // }
 
     generateRefreshToken() {
         return randomstring.generate(48);
@@ -19,7 +18,7 @@ class TokenService {
         payload.key=refreshToken.slice(-16)
         console.log("payload",payload);
         console.log(typeof payload);
-        return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {expiresIn: '1h'})
+        return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {expiresIn: '10m'})
     }
 
     validateAccessToken(token,exp=false) {
@@ -39,10 +38,8 @@ class TokenService {
           return false;
         }
         //Если верный, то проверяем refresh token
-        if (refreshToken.slice(-16) == validTest['key']) {
-            return true;
-        }
-        return false;
+        return refreshToken.slice(-16) === validTest['key'];
+
     }
 
     async saveToken(userId, refreshToken, ip, userAgent) {  // Дописать проверку раз в время удаление старых сессий
@@ -58,25 +55,19 @@ class TokenService {
 
     async updateToken(authId, refreshToken, ip) {
         const rows2 = await pool.query('UPDATE sessions SET refresh_token= ?, ip = ?, last_action = CURRENT_TIMESTAMP(0), expired_in = CURRENT_TIMESTAMP(0) + interval \'7\' day WHERE auth_id = ?', [refreshToken,ip,authId]);
-        if (rows2['affectedRows']==1) {
-            return true;
-        }
-        return false;
+        return rows2['affectedRows'] == 1;
+
     }
 
     async removeToken(refreshToken) {  //Удаление
         const rows2 = await pool.query('DELETE FROM sessions WHERE refresh_token = ?', [refreshToken]);
-        if (rows2['affectedRows']==1) {
-            return true;
-        }
-        return false;
+        return rows2['affectedRows'] === 1;
+
     }
     async removeTokenByID (auth_id) {  //Удаление
         const rows2 = await pool.query('DELETE FROM sessions WHERE auth_id = ?', [auth_id]);
-        if (rows2['affectedRows']==1) {
-            return true;
-        }
-        return false;
+        return rows2['affectedRows'] === 1;
+
     }
 
     async findToken(refreshToken) {

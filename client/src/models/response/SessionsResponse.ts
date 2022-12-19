@@ -1,7 +1,7 @@
 export interface SessionsResponse {
-    sessionId: number;
-    ua: string;
+    auth_id: number;
+    useragent: string;
     ip: string;
-    lastAction: string;
-    firstEnter: string;
+    last_action: string;
+    first_enter: string;
 }

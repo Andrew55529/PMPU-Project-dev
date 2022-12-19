@@ -7,6 +7,10 @@ export default class AuthService {
         return $api.post<AuthResponse>('/login',{email, password})
     }
 
+    static async loginGithub(code: string): Promise<AxiosResponse<AuthResponse>> {
+        return $api.post<AuthResponse>('/login/github',{code})  //Тут убрать ошибки
+    }
+
     static async registration(email: string, password: string): Promise<AxiosResponse<AuthResponse>> {
         return $api.post<AuthResponse>('/registration',{email, password})
     }

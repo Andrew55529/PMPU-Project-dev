@@ -1,9 +1,6 @@
 const UserModel = require('../models/user-model');
 const bcrypt = require('bcrypt')
-const uuid = require('uuid');
-const mailService = require('../service/mail-service');
 const tokenService = require('../service/token-service');
-const UserDto = require('../dtos/user-dto');
 const ApiError = require('../exceptions/api-error');
 const pool = require('./db-service');
 
@@ -86,6 +83,42 @@ class UserService {
         return { accessToken: newAccessToken,refreshToken: newRefreshToken } //Пересмотреть отдачу
     }
 
+    async loginGithub(github_id, ip, useragent) {
+        //Проверка существования пользователя
+        const rows = await pool.query('SELECT user_id FROM users WHERE github_id = ? LIMIT 1', [github_id]);
+
+        if (rows.length==0) {
+            throw ApiError.BadRequest(`Пользователь с таким github не существует`)
+        }
+        // console.timeEnd("2");
+        // console.time("3");
+        //Проверка паролья
+
+        // console.timeEnd("3");
+        // console.time("4");
+
+        // Получение прав пользователя
+        const permission= []
+        const perm = await pool.query('SELECT perm_name_id FROM permissions WHERE user_id = ?', [rows[0].user_id]);
+        if (perm.length!=0){
+            perm.forEach(element => { permission.push(element['perm_name_id']); });
+        }
+
+
+        //const userDto = new UserDto(user);
+        //Генерация пары токенов и сохранение в БД
+        const newRefreshToken = tokenService.generateRefreshToken();
+        // console.timeEnd("4");
+        // console.time("5");
+        const sessionId = await tokenService.saveToken(rows[0].user_id, newRefreshToken,ip,useragent);
+        // console.timeEnd("5");
+        // console.time("6");
+        const newAccessToken = tokenService.generateAccessToken({userId: rows[0].user_id,permission,sessionId},newRefreshToken);
+        // console.timeEnd("6");
+        return { accessToken: newAccessToken,refreshToken: newRefreshToken } //Пересмотреть отдачу
+    }
+
+
     async logout(refreshToken) {
         const remove = await tokenService.removeToken(refreshToken);
         return remove;
@@ -147,9 +180,15 @@ class UserService {
     }
 
     async getSessions(userId) {
-        const rows = await pool.query('SELECT ip,useragent,last_action,first_enter FROM sessions');
+        const rows = await pool.query('SELECT auth_id,ip,useragent,last_action,first_enter FROM sessions WHERE user_id = ?',[userId]);
         delete rows.meta;
         return rows;
+    }
+
+    async delSessions(userId, sessionId) {
+        const rows = await pool.query('DELETE FROM sessions WHERE user_id = ? and auth_id=?',[userId,sessionId]);
+        return rows["affectedRows"] == 1;
+
     }
 
     async getPermissionDB(user_id) {
@@ -164,9 +203,8 @@ class UserService {
 
     async checkPermissionDB(user_id, permission) {
         const rows = await pool.query('SELECT perm_name_id FROM permissions WHERE user_id = ? AND perm_name_id = ?',[user_id,permission]);
-        if (rows.length!=0)
-            return true;
-        return false
+        return rows.length != 0;
+
     }
 
 }

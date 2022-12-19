@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, useContext, useState} from 'react';
+import React, {FC, useState} from 'react';
 // import {Context} from "../index";
 import {observer} from "mobx-react-lite";
 import {colors} from "../components/colors";
@@ -16,20 +16,22 @@ import RegularText from '../components/Text/RegularRext';
 
 
 
-const {brand,darkLight,primary,green} = colors;
+const {brand,green} = colors;
 
 
 
 const LoginScreen: FC = () => {
-    const [hidePassword,setHidePassword] = useState<boolean>(true);
+    // const [hidePassword,setHidePassword] = useState<boolean>(true);
     // const {store} = useContext(Context);
 
-    const {login,registration_temp} = useAction();
+    const {login} = useAction();
 
     const {error,isLoading} = useTypedSelector(state => state.auth);
 
     const [email,setEmail] = useState<string>("");
     const [password,setPassword] = useState<string>("");
+    const clientId = "d63b9e565cbef096b283";
+    const githubUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
 
     return (
         <MainContainer>
@@ -43,7 +45,7 @@ const LoginScreen: FC = () => {
                 <StyledTextInput2 label="Password" value={password} onChangeText={setPassword} placeholder="****" isPassword={true} style={{marginBottom:10}} icon={<LogoutIcon color={brand} />}/>
                 <RegularButton onPress={() => {login(email,password);}}><RegularText >Press m1e</RegularText ></RegularButton>
                 <Line />
-                <RegularButton  textStyle={{backgroundColor: green }} onPress={() => {registration_temp(email,password);}} ><GoogleIcon/><RegularText >Press m2e</RegularText></RegularButton>
+                <a href={githubUrl}><RegularButton  textStyle={{backgroundColor: green }}  ><GoogleIcon/><RegularText >Press m2e</RegularText></RegularButton></a>
             </EmptyContainer>
         </MainContainer>
     );

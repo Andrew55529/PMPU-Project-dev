@@ -64,13 +64,18 @@ function DropdownMenu(props: PersonProps1) {
                 unmountOnExit
                 onEnter={calcHeight}>
                 <div className="menu">
-                    <DropdownItem>My Profile</DropdownItem>
-                    <DropdownItem
-                        leftIcon={<SettingsIcon />}
-                        rightIcon={<ChevronIcon />}
-                        goToMenu="settings">
-                        Settings
-                    </DropdownItem>
+                    <Link to="/profile"><DropdownItem>My Profile</DropdownItem></Link>
+                    {
+                        // @ts-ignore
+                        user["permission"].length !=0 &&
+                            <DropdownItem
+                                leftIcon={<SettingsIcon />}
+                                rightIcon={<ChevronIcon />}
+                                goToMenu="settings">
+                                Settings
+                            </DropdownItem>
+                    }
+
                     <DropdownItem
                         leftIcon={<SettingsIcon />}
                         rightIcon={<ChevronIcon />}

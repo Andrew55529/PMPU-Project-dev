@@ -27,6 +27,23 @@ export const AuthActionCreator = {
         }
 
     },
+    loginGithub: (code:string) => async (dispatch: AppDsipatch) => {
+        try {
+            console.log(code)
+            dispatch(AuthActionCreator.setIsLoading(true));
+            const response = await AuthService.loginGithub(code);
+            console.log(response)
+            localStorage.setItem('token', response.data.accessToken);
+            const datafromtoken=JSON.parse(atob(response.data.accessToken.split('.')[1]));
+            dispatch(AuthActionCreator.setIsAuth(true));
+            dispatch(AuthActionCreator.setUser({userId: datafromtoken["userId"], permission: datafromtoken["permission"],sessionId:datafromtoken["sessionId"]  }));
+
+        }catch (e:any) {
+
+            dispatch(AuthActionCreator.setError(e.response?.data?.message))
+        }
+
+    },
     registration_temp: (username:string,password:string) => async (dispatch: AppDsipatch) => {
         try {
             console.log(username,password)
@@ -65,7 +82,7 @@ export const AuthActionCreator = {
     },
     logout: () => async (dispatch: AppDsipatch) => {
         try {
-            const response = await AuthService.logout();
+            await AuthService.logout();
             localStorage.removeItem('token');
             dispatch(AuthActionCreator.setIsAuth(false));
             dispatch(AuthActionCreator.setUser({} as IUser));

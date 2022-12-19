@@ -38,7 +38,8 @@ class PermController {
             //Перенести отсюда
             const rows2 = await pool.query('SELECT user_id,action,object,time FROM logs');
             console.log(rows2);
-            return res.json("123");
+            delete rows2.meta;
+            return res.json(rows2);
         } catch (e) {
             next(e)
         }

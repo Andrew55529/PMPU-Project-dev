@@ -31,7 +31,14 @@ $api.interceptors.response.use( (config) => {
     if (error.response.status === 401 && error.config && !error.config._isRetry) {
         originalRequest._isRetry = true;
         try {
-            const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, {withCredentials: true});
+            let config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                withCredentials: true
+            }
+            // const headers = {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+            const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, config); //ЗАгаловок
             localStorage.setItem('token', response.data.accessToken);
             return $api.request(originalRequest);
         } catch (e) {

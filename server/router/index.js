@@ -24,12 +24,15 @@ router.post('/logout', userController.logout);
 router.get('/activate/:link', userController.activate);
 router.get('/refresh',ipuaMiddleware,AATM ,userController.refresh); //Проверить надо ли еще
 
-router.get('/users',AATM,CATM,DBATM,PM(2), permController.getLogs);
+router.get('/logs',AATM,CATM,DBATM,PM(2), permController.getLogs);
 router.get('/users',AATM,CATM,DBATM,PM(1), userController.getUsers);
 router.get('/sessions',AATM, CATM,DBATM, userController.getSession);
+router.delete('/sessions/:sessionId',AATM, CATM,DBATM, userController.delSession);
 
 router.get('/perm/doors',AATM, CATM,DBATM,permController.getDoors);
 router.post('/perm/door/:localDoorId',AATM, CATM,DBATM,permController.openDoors);
+
+router.post('/login/github',body('code').isLength({min:15, max:25}),ipuaMiddleware,userController.loginGithub);
 
 
 module.exports = router
