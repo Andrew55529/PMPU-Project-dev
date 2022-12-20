@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const tokenService = require('../service/token-service');
 const ApiError = require('../exceptions/api-error');
 const pool = require('./db-service');
+const randomstring = require("randomstring");
 
 
 class UserService {
@@ -186,7 +187,7 @@ class UserService {
         if (rows.length==0) {
             return null;
         }
-        console.log(rows);
+        console.log(rows[0]);
         return rows[0]['useragent'];
     }
 
@@ -194,6 +195,21 @@ class UserService {
         const rows = await pool.query('SELECT user_id, name, onoff FROM users');
         delete rows.meta;
         return rows;
+    }
+
+    async checkUser(login) {
+        const rows = await pool.query('SELECT 1 FROM users WHERE name= ?',[login]);
+        if (rows.length==0) return false;
+        return true;
+    }
+
+    async addUser(email,login,user_id_who) {
+        const password = randomstring.generate(8);
+        const hashPassword = await bcrypt.hash(password, 3)
+        // const activationLink = uuid.v4();
+        const rows = await pool.query('INSERT INTO users (name,email,password,created_by) VALUES (?,?,?,?)', [login,email,hashPassword,user_id_who]);
+
+        return password;
     }
 
     async getSessions(userId) {

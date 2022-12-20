@@ -1,4 +1,5 @@
 const userService = require('../service/user-service');
+const MailService = require('../service/mail-service');
 const {validationResult} = require('express-validator');
 const ApiError = require('../exceptions/api-error');
 const {Octokit} = require("octokit");
@@ -115,6 +116,32 @@ class UserController {
 
 
     }
+
+    async addUser(req,res,next) {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return next(ApiError.BadRequest('Ошибка при валидации', errors.array()))
+            }
+            const {email, login} = req.body;
+
+            const tess= await userService.checkUser(login);
+            if (tess)
+            {
+                throw ApiError.BadRequest2("User already exist")
+
+            }
+            const pass = await userService.addUser(email,login,req.ATD["userId"]);
+            await MailService.sendPassword(email, login, pass);
+
+            return res.json({"status":200});
+        } catch (e) {
+            next(e);
+        }
+
+
+    }
+
 
     async connectGithub(req,res,next) {
         try {
