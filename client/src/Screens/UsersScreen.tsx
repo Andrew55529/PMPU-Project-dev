@@ -39,7 +39,7 @@ const UsersScreen: FC = () => {
                     {
                         users.map(user => {
                             return (
-                                <ListUsers name={user.name} onoff={user.onoff}  user_id={user.user_id}/>
+                                <ListUsers name={user.name} email={user.email} onoff={user.onoff}  user_id={user.user_id}/>
                             )
                         })
                     }

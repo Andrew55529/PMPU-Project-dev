@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
 import {CSSTransition} from "react-transition-group";
-import {ReactComponent as ChevronIcon} from "../icons/chevron.svg";
+import {ReactComponent as GithubIcon} from "../icons/github.svg";
 import {ReactComponent as ArrowIcon} from "../icons/arraow.svg";
-import {ReactComponent as BoltIcon} from "../icons/bolt.svg";
+import {ReactComponent as ProfileIcon} from "../icons/profile.svg";
 import {ReactComponent as ThemeLightDark} from "../icons/ThemeLightDark.svg";
 import {ReactComponent as SettingsIcon} from "../icons/settings.svg";
 import {ReactComponent as LogoutIcon} from "../icons/logout.svg";
@@ -20,7 +20,6 @@ interface PersonProps1 {
 
 interface Test3 {
     leftIcon?: any;
-    rightIcon?: any;
     goToMenu?: string;
     children?: React.ReactNode;
     onClick?: () => void;
@@ -52,14 +51,12 @@ function DropdownMenu(props: PersonProps1) {
             return (<Link to={props.link} className="menu-item">
                 <span className="icon-button">{props.leftIcon}</span>
                 {props.children}
-                <span className="icon-right">{props.rightIcon}</span>
             </Link>);
         }
         return (
             <a href={props.linkother ||"#"} className="menu-item" onClick={() => {props.goToMenu && setActiveMenu(props.goToMenu); props.onClick?.()}}>
                 <span className="icon-button">{props.leftIcon}</span>
                 {props.children}
-                <span className="icon-right">{props.rightIcon}</span>
             </a>
         );
     }
@@ -77,14 +74,14 @@ function DropdownMenu(props: PersonProps1) {
                 unmountOnExit
                 onEnter={calcHeight}>
                 <div className="menu">
-                    <DropdownItem link="/profile" >My Profile</DropdownItem>
+                    <DropdownItem link="/profile" leftIcon={<ProfileIcon/>} >My Profile</DropdownItem>
                     {
                         // @ts-ignore
                         user["permission"].length !=0 &&
                             <DropdownItem
 
                                 leftIcon={<SettingsIcon />}
-                                rightIcon={<ChevronIcon />}
+
                                 goToMenu="settings">
                                 Settings
                             </DropdownItem>
@@ -92,11 +89,11 @@ function DropdownMenu(props: PersonProps1) {
 
                     <DropdownItem
                         leftIcon={<SettingsIcon />}
-                        rightIcon={<ChevronIcon />}
+
                         goToMenu="user-settings">
                         User settings
                     </DropdownItem>
-                    <DropdownItem onClick={() => logout()} leftIcon={<LogoutIcon />} rightIcon={<ChevronIcon />}>Logout</DropdownItem>
+                    <DropdownItem onClick={() => logout()} leftIcon={<LogoutIcon />} >Logout</DropdownItem>
 
                 </div>
             </CSSTransition>
@@ -121,8 +118,6 @@ function DropdownMenu(props: PersonProps1) {
                         <DropdownItem link="/users/add" leftIcon={<ThemeLightDark />}>Add user</DropdownItem>
                     }
 
-                    {/*<DropdownItem leftIcon={<BoltIcon />}>Add user</DropdownItem>*/}
-                    {/*<DropdownItem leftIcon={<BoltIcon />}>Logs</DropdownItem>*/}
 
                 </div>
             </CSSTransition>
@@ -136,7 +131,7 @@ function DropdownMenu(props: PersonProps1) {
                     <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
                         <h2>Back</h2>
                     </DropdownItem>
-                    <DropdownItem linkother={githubUrl} leftIcon={<ThemeLightDark />}>Connect Github</DropdownItem>
+                    <DropdownItem linkother={githubUrl} leftIcon={<GithubIcon />}>Connect Github</DropdownItem>
 
                 </div>
             </CSSTransition>

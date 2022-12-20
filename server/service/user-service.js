@@ -192,7 +192,7 @@ class UserService {
     }
 
     async getAlUsers() {
-        const rows = await pool.query('SELECT user_id, name, onoff FROM users');
+        const rows = await pool.query('SELECT user_id, name, onoff, email FROM users');
         delete rows.meta;
         return rows;
     }

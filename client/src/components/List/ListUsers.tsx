@@ -33,6 +33,13 @@ const ListUsers: FC<ListItemUsersProps> = (props) => {
 
                 </div>
             </div>
+            <div className="block user">
+                <div className="details">
+                    <h3 className="name">Email</h3>
+                    <h3 className="username">{props.email}</h3>
+
+                </div>
+            </div>
 
             <div className="status">
 
