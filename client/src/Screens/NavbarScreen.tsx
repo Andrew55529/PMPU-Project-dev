@@ -12,7 +12,7 @@ const NavbarScreen = () => {
         <div>
             <Navbar>
                 <NavItem icon={<PlusIcon />} />
-                <Link to="/doors"><NavItem icon={<BellIcon />} /></Link>
+                <NavItem link="/doors" icon={<BellIcon />} />
                 <NavItem icon={<CarrotIcon />}>
                     <DropdownMenu />
                 </NavItem>

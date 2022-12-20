@@ -8,6 +8,7 @@ import Empty2 from "../Screens/Empty2";
 import UsersScreen from "../Screens/UsersScreen";
 import ProfileScreen from "../Screens/ProfileScreen";
 import OAuth2RedirectHandler from "./OAuth2RedirectHandler";
+import AddUserScreen from "../Screens/AddUserScreen";
 
 const AppRouter = () => {
     const {isAuth, isLoading} = useTypedSelector(state => state.auth);
@@ -22,6 +23,7 @@ const AppRouter = () => {
                         <Route path="/profile" element={<ProfileScreen/>}/>
                         <Route path="/doors" element={<DoorsScreen/>}/>
                         <Route path="/users" element={<UsersScreen/>}/>
+                        <Route path="/users/add" element={<AddUserScreen/>}/>
                         <Route path="*" element={<Navigate to="doors" />} />
                     </Routes>
                 </React.Fragment>

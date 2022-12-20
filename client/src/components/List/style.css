@@ -1,4 +1,6 @@
 .list {
+    max-width: 500px;
+    min-width: 200px;
     padding: 1rem;
 }
 .line {
@@ -95,4 +97,8 @@ a{
     border-radius: 50%;
     background-color: rgba(14,131,214);
     margin: 0.2rem 0;
+}
+
+.block {
+    padding: 0px 5px;
 }

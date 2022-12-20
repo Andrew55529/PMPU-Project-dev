@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {Line, PageLogo, PageTitle} from "../components/styles";
 import EmptyContainer from "../components/Containers/EmptyContainer";
 import {useTypedSelector} from "../hooks/useTypedSelector";
@@ -13,9 +13,12 @@ import {UsersResponse} from "../models/response/UsersResponse";
 import ListBase from "../components/List/ListBase";
 import List from "../components/List/List";
 import ListUsers from "../components/List/ListUsers";
+import StyledTextInput2 from "../components/Inputs/StyledTextInput";
+import {ReactComponent as LogoutIcon} from "../icons/logout.svg";
+import {colors} from "../components/colors";
 
-
-const UsersScreen: FC = () => {
+const {brand,green} = colors;
+const AddUserScreen: FC = () => {
     // const {isAuth, isLoading} = useTypedSelector(state => state.auth);
     const {users} = useTypedSelector(state => state.data);
     // useEffect(() => {
@@ -23,31 +26,28 @@ const UsersScreen: FC = () => {
     //     console.log("123",doors);
     // }, [])
     //
-    const {getUsers} = useAction();
-    useEffect(() => {
-        getUsers();
-    }, [])
-
+    // const {getUsers} = useAction();
+    // useEffect(() => {
+    //     getUsers();
+    // }, [])
+    const [email,setEmail] = useState<string>("");
+    const [login,setLogin] = useState<string>("");
 
 
     return (
         <MainContainer>
             <EmptyContainer>
 
-                <PageTitle> Users</PageTitle>
-                <ListBase>
-                    {
-                        users.map(user => {
-                            return (
-                                <ListUsers name={user.name} onoff={user.onoff}  user_id={user.user_id}/>
-                            )
-                        })
-                    }
-                </ListBase>
+                <PageTitle>Add user</PageTitle>
+                {/*ФОрма*/}
+                <StyledTextInput2 label="Email" value={email} onChangeText={setEmail} placeholder="email@email.com" keyboardType="email-address" style={{marginBottom:10}} icon={<LogoutIcon color={brand} />}/>
+                <StyledTextInput2 label="Login" value={login} onChangeText={setLogin} placeholder="login123" keyboardType="email-address" style={{marginBottom:10}} icon={<LogoutIcon color={brand} />}/>
+                <RegularButton onPress={() => {console.log("123");}}><RegularText >Press m1e</RegularText ></RegularButton>
+                <Line />
 
             </EmptyContainer>
         </MainContainer>
     );
 };
 
-export default UsersScreen;
+export default AddUserScreen;

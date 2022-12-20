@@ -27,42 +27,17 @@ const ProfileScreen: FC = () => {
 
     return (
         <>
-            <ListBase>
-
-                {
-                    sessions.map(session => {
-                        return (
-                        <List ip={session.ip} ua={session.useragent} first_enter={session.first_enter} last_action={session.last_action} sessionId={session.auth_id}/>
-                        )
-                    })
-                }
-
-
-            </ListBase>
-
             <MainContainer>
-                <EmptyContainer>
-                    <PageLogo resizeMode="cover" source={require('../assets/logo.png')}/>
-                    <PageTitle> Users</PageTitle>
-
-                {
+                <PageTitle>Session list</PageTitle>
+                <ListBase>
+                    {
                         sessions.map(session => {
-                            console.log(session);
                             return (
-                                <>
-                                    <div>
-                                        <div>ICon</div>
-                                        <div> Text</div>
-                                    </div>
-                                    <RegularText key={session.auth_id}>{session.ip}{session.useragent}{session.last_action}{session.first_enter}</RegularText >
-                                    <Line key={"l"+session.auth_id}  />
-                                </>
-                                // <RegularText>{door.name}{door.local_door_id}</RegularText>
-                            );
+                                <List key={session.auth_id} ip={session.ip} ua={session.useragent} first_enter={session.first_enter} last_action={session.last_action} sessionId={session.auth_id}/>
+                            )
                         })
-
                     }
-                </EmptyContainer>
+                </ListBase>
             </MainContainer>
         </>
     );

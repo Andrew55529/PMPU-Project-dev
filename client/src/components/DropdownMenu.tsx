@@ -25,6 +25,7 @@ interface Test3 {
     children?: React.ReactNode;
     onClick?: () => void;
     link?: string;
+    linkother?: string;
 }
 
 
@@ -47,8 +48,15 @@ function DropdownMenu(props: PersonProps1) {
 
 
     function DropdownItem(props: Test3) {
+        if (props.link) {
+            return (<Link to={props.link} className="menu-item">
+                <span className="icon-button">{props.leftIcon}</span>
+                {props.children}
+                <span className="icon-right">{props.rightIcon}</span>
+            </Link>);
+        }
         return (
-            <a href={props.link || "#"} className="menu-item" onClick={() => {props.goToMenu && setActiveMenu(props.goToMenu); props.onClick?.()}}>
+            <a href={props.linkother ||"#"} className="menu-item" onClick={() => {props.goToMenu && setActiveMenu(props.goToMenu); props.onClick?.()}}>
                 <span className="icon-button">{props.leftIcon}</span>
                 {props.children}
                 <span className="icon-right">{props.rightIcon}</span>
@@ -69,11 +77,12 @@ function DropdownMenu(props: PersonProps1) {
                 unmountOnExit
                 onEnter={calcHeight}>
                 <div className="menu">
-                    <Link to="/profile"><DropdownItem>My Profile</DropdownItem></Link>
+                    <DropdownItem link="/profile" >My Profile</DropdownItem>
                     {
                         // @ts-ignore
                         user["permission"].length !=0 &&
                             <DropdownItem
+
                                 leftIcon={<SettingsIcon />}
                                 rightIcon={<ChevronIcon />}
                                 goToMenu="settings">
@@ -104,11 +113,16 @@ function DropdownMenu(props: PersonProps1) {
                     {
                         // @ts-ignore
                         user["permission"].includes(2) &&
-                        <Link to="/users"><DropdownItem leftIcon={<ThemeLightDark />}>Users</DropdownItem></Link>
+                        <DropdownItem link="/users" leftIcon={<ThemeLightDark />}>Users</DropdownItem>
+                    }
+                    {
+                        // @ts-ignore
+                        user["permission"].includes(2) &&
+                        <DropdownItem link="/users/add" leftIcon={<ThemeLightDark />}>Add user</DropdownItem>
                     }
 
-                    <DropdownItem leftIcon={<BoltIcon />}>Add user</DropdownItem>
-                    <DropdownItem leftIcon={<BoltIcon />}>Logs</DropdownItem>
+                    {/*<DropdownItem leftIcon={<BoltIcon />}>Add user</DropdownItem>*/}
+                    {/*<DropdownItem leftIcon={<BoltIcon />}>Logs</DropdownItem>*/}
 
                 </div>
             </CSSTransition>
@@ -122,7 +136,7 @@ function DropdownMenu(props: PersonProps1) {
                     <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
                         <h2>Back</h2>
                     </DropdownItem>
-                    <DropdownItem link={githubUrl} leftIcon={<ThemeLightDark />}>Connect Github</DropdownItem>
+                    <DropdownItem linkother={githubUrl} leftIcon={<ThemeLightDark />}>Connect Github</DropdownItem>
 
                 </div>
             </CSSTransition>

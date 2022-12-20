@@ -11,3 +11,8 @@ export interface ListItemProps {
     last_action: string;
     sessionId: number;
 }
+export interface ListItemUsersProps {
+    name: string;
+    onoff: boolean;
+    user_id: number;
+}
