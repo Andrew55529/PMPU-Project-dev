@@ -51,7 +51,7 @@ const ListUsers: FC<ListItemUsersProps> = (props) => {
             </div>
 
 
-            <div className="block contact" onClick={() => {UserService.delSession(props.user_id);}}>
+            <div className="block contact" onClick={props.onBtn}>
                 <a href="#" className="btn" >
                     Edit
                 </a>

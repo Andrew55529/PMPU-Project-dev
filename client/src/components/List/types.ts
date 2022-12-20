@@ -16,4 +16,5 @@ export interface ListItemUsersProps {
     onoff: boolean;
     user_id: number;
     email: string;
+    onBtn: any;
 }
