@@ -93,6 +93,16 @@ class UserController {
         }
     }
 
+    async deleteUser(req, res, next) {
+        try {
+            const asdas = req.params.userId;
+            const users = await userService.deleteUser(asdas);
+            return res.json(users);
+        } catch (e) {
+            next(e)
+        }
+    }
+
 
     async getDoors(req,res,next) {
         try {

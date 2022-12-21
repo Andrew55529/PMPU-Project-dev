@@ -197,6 +197,14 @@ class UserService {
         return rows;
     }
 
+    async deleteUser(userId) {
+        const rows1 = await pool.query('DELETE FROM users WHERE user_id = ?',[userId]);
+        // const rows2 = await pool.query('DELETE FROM permissions WHERE user_id = ?',[userId]);
+        // const rows3 = await pool.query('DELETE FROM list  WHERE user_id = ?',[userId]);
+        console.log(rows1);
+        return true;
+    }
+
     async getUser(userId) {
         const rows1 = await pool.query('SELECT user_id, name, onoff, email, created_by FROM users WHERE user_id = ?',[userId]);
         const rows2 = await pool.query('SELECT perm_name_id, gived_by FROM permissions WHERE user_id = ?',[userId]);
