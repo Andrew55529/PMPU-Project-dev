@@ -26,7 +26,10 @@ router.get('/refresh',ipuaMiddleware,AATM ,userController.refresh); //Прове
 
 router.get('/logs',AATM,CATM,DBATM,PM(2), permController.getLogs);
 router.get('/users',AATM,CATM,DBATM,PM(1), userController.getUsers);
+router.get('/users/:userId',AATM,CATM,DBATM,PM(1), userController.getUser);
 router.post('/users/add',body('login').isLength({min:3, max:32}),body('email').isEmail(),AATM,CATM,DBATM,PM(3), userController.addUser);
+
+router.get('/doors',AATM,CATM,DBATM,PM(1), userController.getDoors);
 
 router.get('/sessions',AATM, CATM,DBATM, userController.getSession);
 router.delete('/sessions/:sessionId',AATM, CATM,DBATM, userController.delSession);

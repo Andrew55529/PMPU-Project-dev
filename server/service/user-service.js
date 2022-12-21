@@ -192,9 +192,23 @@ class UserService {
     }
 
     async getAlUsers() {
-        const rows = await pool.query('SELECT user_id, name, onoff, email FROM users');
+        const rows = await pool.query('SELECT user_id, name, onoff, email,created_by FROM users');
         delete rows.meta;
         return rows;
+    }
+
+    async getUser(userId) {
+        const rows1 = await pool.query('SELECT user_id, name, onoff, email, created_by FROM users WHERE user_id = ?',[userId]);
+        const rows2 = await pool.query('SELECT perm_name_id, gived_by FROM permissions WHERE user_id = ?',[userId]);
+        const rows3 = await pool.query('SELECT doors.local_door_id, list.gived_by FROM list LEFT JOIN doors ON list.door_id = doors.door_id WHERE user_id = ?',[userId]);
+        delete rows1.meta;
+        delete rows2.meta;
+        delete rows3.meta;
+        // console.log(rows1[0]);
+        // console.log(rows2);
+        // console.log(rows3);
+        return {user: rows1[0],permission: rows2, doors: rows3};
+
     }
 
     async checkUser(login) {
@@ -217,6 +231,14 @@ class UserService {
         delete rows.meta;
         return rows;
     }
+
+    async getDoors() {
+        const rows = await pool.query('SELECT local_door_id, name FROM doors');
+        delete rows.meta;
+        return rows;
+    }
+
+
 
     async delSessions(userId, sessionId) {
         const rows = await pool.query('DELETE FROM sessions WHERE user_id = ? and auth_id=?',[userId,sessionId]);

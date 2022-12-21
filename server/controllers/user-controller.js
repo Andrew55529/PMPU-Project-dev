@@ -79,12 +79,31 @@ class UserController {
         try {
             const users = await userService.getAlUsers();
             return res.json(users);
-            res.json(['123','456']);
         } catch (e) {
             next(e)
         }
     }
-    
+    async getUser(req, res, next) {
+        try {
+            const asdas = req.params.userId;
+            const users = await userService.getUser(asdas);
+            return res.json(users);
+        } catch (e) {
+            next(e)
+        }
+    }
+
+
+    async getDoors(req,res,next) {
+        try {
+            const doors = await userService.getDoors();
+            return res.json(doors);
+        } catch (e) {
+            console.log(e);
+            next(e);
+        }
+    }
+
     async getSession(req,res,next) {
         try {
             console.log(req.ATD["userId"]);

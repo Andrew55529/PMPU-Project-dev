@@ -29,9 +29,9 @@ export const DataActionCreator = {
 
     getUsers: () => async (dispatch: AppDsipatch) => {
         try {
-            console.log("[DOORS] start");
+            // console.log("[DOORS] start");
             const response = await $api.get<UsersResponse[]>(`/users`);
-            console.log(response.data)
+            // console.log(response.data)
             dispatch(DataActionCreator.setUsers(response.data));
 
         }catch (e:any) {
@@ -40,7 +40,7 @@ export const DataActionCreator = {
         } finally {
             // dispatch(AuthActionCreator.setIsLoading(false));
         }
-        console.log("[DOORS] end");
+        // console.log("[DOORS] end");
 
     },
 
