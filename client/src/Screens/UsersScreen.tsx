@@ -114,25 +114,25 @@ const UsersScreen: FC = () => {
 
 
 
-    const handleChange = (e: { target: { value: number ; checked: any; }; }) => {
+    const handleChange = (e: { target: { value: string ; checked: any; }; }) => {
         var updatedList = [...check];
         const { value, checked } = e.target;
-        console.log(value,checked);
         if (checked) {
-            updatedList = [...check, Number(value)];
+            updatedList = [...updatedList, Number(value)];
         } else {
-            updatedList.splice(check.indexOf(value), 1);
+            updatedList.splice(updatedList.indexOf(Number(value)), 1);
         }
+        console.log(updatedList);
         setCheck(updatedList);
     };
 
-    const handleChangePerm = (e: { target: { value: number ; checked: any; }; }) => {
+    const handleChangePerm = (e: { target: { value: string ; checked: any; }; }) => {
         var updatedList = [...perm];
         const { value, checked } = e.target;
         if (checked) {
             updatedList = [...perm, Number(value)];
         } else {
-            updatedList.splice(perm.indexOf(value), 1);
+            updatedList.splice(perm.indexOf(Number(value)), 1);
         }
         setPerm(updatedList);
     };
