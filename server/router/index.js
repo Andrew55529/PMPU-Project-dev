@@ -24,13 +24,20 @@ router.post('/logout', userController.logout);
 router.get('/activate/:link', userController.activate);
 router.get('/refresh',ipuaMiddleware,AATM ,userController.refresh); //Проверить надо ли еще
 
-router.get('/logs',AATM,CATM,DBATM,PM(2), permController.getLogs);
+router.get('/logs',AATM,CATM,DBATM,PM(4), permController.getLogs);
 router.get('/users',AATM,CATM,DBATM,PM(1), userController.getUsers);
 router.get('/users/:userId',AATM,CATM,DBATM,PM(1), userController.getUser);
+router.put('/users/:userId',AATM,CATM,DBATM,PM(1), userController.updateUser);
 router.delete('/users/:userId',AATM,CATM,DBATM,PM(1), userController.deleteUser);
-router.post('/users/add',body('login').isLength({min:3, max:32}),body('email').isEmail(),AATM,CATM,DBATM,PM(3), userController.addUser);
+router.post('/users/add',body('login').isLength({min:3, max:32}),body('email').isEmail(),AATM,CATM,DBATM,PM(2), userController.addUser);
 
 router.get('/doors',AATM,CATM,DBATM,PM(1), userController.getDoors);
+router.post('/doors',AATM,CATM,DBATM,PM(3), userController.addDoors);
+router.put('/doors/:doorId',AATM,CATM,DBATM,PM(3), userController.updateDoors);
+router.delete('/doors/:doorId',AATM,CATM,DBATM,PM(3), userController.delDoors);
+
+
+router.get('/permissions',AATM,CATM,DBATM,PM(1), userController.getPermissions);
 
 router.get('/sessions',AATM, CATM,DBATM, userController.getSession);
 router.delete('/sessions/:sessionId',AATM, CATM,DBATM, userController.delSession);

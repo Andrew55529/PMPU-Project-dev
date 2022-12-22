@@ -18,3 +18,9 @@ export interface ListItemUsersProps {
     email: string;
     onBtn: any;
 }
+
+export interface ListDoorsProps {
+    name: string;
+    local_door_id: number;
+    onBtn: any;
+}

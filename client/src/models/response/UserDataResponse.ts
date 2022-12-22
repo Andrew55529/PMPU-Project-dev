@@ -1,9 +1,9 @@
-interface USerTemp {
-    user_id: number;
+export interface USerTemp {
+    user_id?: number;
     name: string;
-    onoff: string;
+    onoff: boolean;
     email: string;
-    created_by: number;
+    created_by?: number;
 }
 
 interface PermTemp {

@@ -1,19 +1,9 @@
 import React, {FC} from 'react';
 import styled from 'styled-components/native';
-import {ReactComponent as BellIcon} from "../../icons/bell.svg";
-import {ListItemProps, ListProps} from "./types";
-import DoorsService from "../../services/DoorsService";
+import {ListItemProps} from "./types";
 import UserService from "../../services/UserService";
+import {useAction} from "../../hooks/useAction";
 
-export const StyledView = styled.View`
-  flex: 1;
-  padding: 25px;
-  padding-top: 40px;
-  background-color: transparent;
-  justify-content: center;
-  align-items: center;
-  text-align-: middle;
-`
 
 const List: FC<ListItemProps> = (props) => {
     function genTime(st:string) {
@@ -22,7 +12,7 @@ const List: FC<ListItemProps> = (props) => {
 
     }
     // const [os,browser]=props.ua?.split("|");
-
+    const {getSessions} = useAction();
     return (
 
             <div className="line">
@@ -67,7 +57,7 @@ const List: FC<ListItemProps> = (props) => {
                 {/*    <p>+7929999</p>*/}
                 {/*</div>*/}
 
-                <div className="block contact" onClick={() => {UserService.delSession(props.sessionId);}}>
+                <div className="block contact" onClick={() => {UserService.delSession(props.sessionId);getSessions();}}>
                     <a href="#" className="btn" >
                         Close
                     </a>

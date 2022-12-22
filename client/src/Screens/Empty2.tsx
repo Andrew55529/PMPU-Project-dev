@@ -8,7 +8,7 @@ const Empty2: FC = () => {
             <StyledContainer>
                 <EmptyContainer>
                     <PageLogo resizeMode="cover" source={require('../assets/logo.png')}/>
-                    <PageTitle> Emprty2</PageTitle>
+                    <PageTitle> LOADING</PageTitle>
                 </EmptyContainer>
             </StyledContainer>
     );

@@ -93,6 +93,18 @@ class UserController {
         }
     }
 
+    async updateUser(req, res, next) {
+        try {
+            const asdas = req.params.userId;
+            const users = await userService.updateUser(asdas,req.body,req.ATD["userId"]);
+            return res.json(users);
+        } catch (e) {
+            next(e)
+        }
+    }
+
+
+
     async deleteUser(req, res, next) {
         try {
             const asdas = req.params.userId;
@@ -108,6 +120,71 @@ class UserController {
         try {
             const doors = await userService.getDoors();
             return res.json(doors);
+        } catch (e) {
+            console.log(e);
+            next(e);
+        }
+    }
+
+    async addDoors(req,res,next) {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return next(ApiError.BadRequest('Ошибка при валидации', errors.array()))
+            }
+            const {name, local_door_id} = req.body;
+
+            const doors = await userService.addDoors(name,local_door_id);
+            if (doors===false) throw ApiError.BadRequest2("Door already have")
+            return res.json({"status":200});
+        } catch (e) {
+            console.log(e);
+            next(e);
+        }
+    }
+
+    async delDoors(req,res,next) {
+        try {
+            const asdas = req.params.doorId;
+            const doors = await userService.delDoors(asdas);
+            return res.json(doors);
+        } catch (e) {
+            console.log(e);
+            next(e);
+        }
+    }
+
+    async updateDoors(req,res,next) {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return next(ApiError.BadRequest('Ошибка при валидации', errors.array()))
+            }
+            const {name, local_door_id} = req.body;
+            const asdas = req.params.doorId;
+            //
+            const doors = await userService.updateDoors(asdas,name,local_door_id);
+            if (doors===false) throw ApiError.BadRequest2("Door with this local_id alredy have")
+            return res.json({"status":200});
+
+        } catch (e) {
+            console.log(e);
+            next(e);
+        }
+    }
+
+
+
+
+
+
+
+
+
+    async getPermissions(req,res,next) {
+        try {
+            const perm = await userService.getPermissions();
+            return res.json(perm);
         } catch (e) {
             console.log(e);
             next(e);

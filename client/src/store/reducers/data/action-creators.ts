@@ -31,7 +31,7 @@ export const DataActionCreator = {
         try {
             // console.log("[DOORS] start");
             const response = await $api.get<UsersResponse[]>(`/users`);
-            // console.log(response.data)
+            console.log(response.data)
             dispatch(DataActionCreator.setUsers(response.data));
 
         }catch (e:any) {

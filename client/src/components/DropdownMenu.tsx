@@ -76,6 +76,7 @@ function DropdownMenu(props: PersonProps1) {
                 <div className="menu">
                     <DropdownItem link="/profile" leftIcon={<ProfileIcon/>} >My Profile</DropdownItem>
                     {
+
                         // @ts-ignore
                         user["permission"].length !=0 &&
                             <DropdownItem
@@ -109,7 +110,7 @@ function DropdownMenu(props: PersonProps1) {
                     </DropdownItem>
                     {
                         // @ts-ignore
-                        user["permission"].includes(2) &&
+                        user["permission"].includes(1) &&
                         <DropdownItem link="/users" leftIcon={<ThemeLightDark />}>Users</DropdownItem>
                     }
                     {
@@ -117,7 +118,11 @@ function DropdownMenu(props: PersonProps1) {
                         user["permission"].includes(2) &&
                         <DropdownItem link="/users/add" leftIcon={<ThemeLightDark />}>Add user</DropdownItem>
                     }
-
+                    {
+                        // @ts-ignore
+                        user["permission"].includes(3) &&
+                        <DropdownItem link="/doorslist" leftIcon={<ThemeLightDark />}>Doors list</DropdownItem>
+                    }
 
                 </div>
             </CSSTransition>
@@ -131,6 +136,7 @@ function DropdownMenu(props: PersonProps1) {
                     <DropdownItem goToMenu="main" leftIcon={<ArrowIcon />}>
                         <h2>Back</h2>
                     </DropdownItem>
+
                     <DropdownItem linkother={githubUrl} leftIcon={<GithubIcon />}>Connect Github</DropdownItem>
 
                 </div>
