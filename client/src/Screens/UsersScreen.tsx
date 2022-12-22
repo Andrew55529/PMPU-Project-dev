@@ -122,7 +122,6 @@ const UsersScreen: FC = () => {
         } else {
             updatedList.splice(updatedList.indexOf(Number(value)), 1);
         }
-        console.log(updatedList);
         setCheck(updatedList);
     };
 
